@@ -50,7 +50,7 @@ const getAllUsers = async (req, res) =>
     try
     {
 
-        let users = await User.find().select('_id first_name last_name email updated created roles').populate('roles');
+        let users = await User.find().select('_id first_name mobile last_name email updated created roles').populate('roles');
         // console.log(users)
         return res.json({
             status: false,
@@ -128,6 +128,57 @@ const getUserByID = async (req, res) =>
             status: false,
             info: "User Successfully Retrieved",
             data: user
+        })
+    } catch (err)
+    {
+        return res.status(500).json({
+            status: true,
+            info: "Could not retrieve User"
+        })
+    }
+}
+
+const updateUserByID = async (req, res) =>
+{
+
+    try
+    {
+        let userUpdate = await User.findByIdAndUpdate({_id:req.params.userId},req.body,{new:true});
+
+        if(!userUpdate){
+            return res.status(400).json({
+                status:true,
+                info:"Update Failed"
+            })
+        }
+
+        return res.json({
+            status: false,
+            info: "User Successfully Updated",
+            data: userUpdate
+        })
+    } catch (err)
+    {
+        return res.status(500).json({
+            status: true,
+            info: "Could not retrieve User"
+        })
+    }
+}
+
+const deleteUserByID = async (req, res) =>
+{
+
+    try
+    {
+        let userUpdate = await User.findByIdAndDelete({ _id: req.params.userId });
+
+       
+
+        return res.json({
+            status: false,
+            info: "User Deleted",
+            data: userUpdate
         })
     } catch (err)
     {
@@ -308,4 +359,5 @@ const getUserByTokenPass = async (req, res, next) =>
 
 module.exports = {
     addNewUser, read, getAllUsers, remove, updateUser, getUserByID, getUserByToken, getUserByTokenPass,getAllUsersPagination
+    ,updateUserByID,deleteUserByID
 }

@@ -26,5 +26,10 @@ Router.route('/v1/user/update')
 Router.route('/v1/users/all/pagination')
     .get(AdminAuthCtrl.requireSignin,UserCtrl.getUserByTokenPass,UserCtrl.getAllUsersPagination)
 
+Router.route('/v1/user/:userId/update')
+    .patch(AdminAuthCtrl.requireSignin,UserCtrl.getUserByTokenPass,UserCtrl.updateUserByID)
+
+Router.route('/v1/user/:userId/delete')
+    .delete(AdminAuthCtrl.requireSignin,UserCtrl.getUserByTokenPass,UserCtrl.deleteUserByID)
 
 module.exports = Router;
